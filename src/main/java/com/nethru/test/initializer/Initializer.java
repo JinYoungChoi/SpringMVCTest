@@ -23,11 +23,11 @@ public class Initializer implements WebApplicationInitializer
     {
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(RootConfig.class);
-        rootContext.refresh();
         
         servletContext.addListener(new ContextLoaderListener(rootContext));
         
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
+        applicationContext.getEnvironment().addActiveProfile("dev");
         applicationContext.register(MvcConfig.class);
         
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(applicationContext));
