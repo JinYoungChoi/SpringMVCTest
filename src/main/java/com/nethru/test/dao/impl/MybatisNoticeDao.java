@@ -1,5 +1,6 @@
 package com.nethru.test.dao.impl;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import com.nethru.test.dao.NoticeDao;
-import com.nethru.test.dao.mybatis.mapper.NoticeMapper;
 import com.nethru.test.model.Notice;
 
 @Repository
@@ -16,15 +16,18 @@ public class MybatisNoticeDao implements NoticeDao {
     
     private static final Logger logger = LoggerFactory.getLogger(JdbcNoticeDao.class);
     
+    private static final String MAPPER_NAMESPACE = "NOTICE_MAPPER.";
+    
     @Autowired
-    private NoticeMapper noticeMapper;
+    private SqlSession sqlSession;
 
     @Override
-    public Notice getNewestNotice() {
-        
+    public Notice getNewestNotice()
+    {
         logger.debug("getNewestNotice() start");
         
-        Notice notice = noticeMapper.getNewestNotice();
+        Notice notice = sqlSession.selectOne(MAPPER_NAMESPACE + "getNewestNotice");
+        logger.debug("notice : {}", notice);
         
         logger.debug("getNewestNotice() end");
         return notice;

@@ -27,7 +27,7 @@ public class Initializer implements WebApplicationInitializer
         servletContext.addListener(new ContextLoaderListener(rootContext));
         
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
-        applicationContext.getEnvironment().addActiveProfile("dev");
+        applicationContext.getEnvironment().addActiveProfile("production");
         applicationContext.register(MvcConfig.class);
         
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(applicationContext));
