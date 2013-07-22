@@ -15,6 +15,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+/**
+ * 루트 설정용 클래스.
+ * 이 클래스는 스프링의 root-context.xml 의 역할을 대신한다.
+ * @author mj
+ *
+ */
 @Configuration
 public class RootConfig {
     
@@ -58,14 +64,6 @@ public class RootConfig {
     }
     
     @Bean
-    public JdbcTemplate jdbcTemplate()
-    {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        jdbcTemplate.setDataSource(this.dataSource());
-        return jdbcTemplate;
-    }
-    
-    @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception 
     {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -81,4 +79,16 @@ public class RootConfig {
         return sqlSession;
     }
     
+    /**
+     * MyBatis 를 사용하지 않고, 쌩 jdbcTemplate 를 이용해서 데이터베이스를 조회하는 DAO 를 만들기 위한 Bean.
+     * 실전에서는 사용할 일이 거의 없다. 예제를 위해서 넣은 코드.
+     * @return
+     */
+    @Bean
+    public JdbcTemplate jdbcTemplate()
+    {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(this.dataSource());
+        return jdbcTemplate;
+    }
 }
