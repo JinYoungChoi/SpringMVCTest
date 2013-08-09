@@ -1,4 +1,4 @@
-package com.nethru.test;
+package com.nethru.test.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -17,14 +17,14 @@ import com.nethru.test.dao.NoticeDao;
 import com.nethru.test.model.Notice;
 
 @Controller
-public class HomeController extends CorsController
+public class HomeController
 {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
     
     @Autowired
     private NoticeDao noticeDao;
     
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
     public String home(Locale locale, Model model)
     {
         logger.info("Welcome home! The client locale is {}.", locale);

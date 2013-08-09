@@ -11,8 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * CORS 를 위한 인터셉터.
- * Origin 헤더가 request 에 존재할 경우, CORS 에 필요한 response 헤더를 추가한다.
- * 즉 크로스도메인 요청인 경우, 브라우저에서 이 요청을 정상적으로 처리할 수 있도록 Access-Control 관련 헤더를 붙여준다.
+ * Origin 헤더가 request 에 존재할 경우, CORS 가능하도록 응답 헤더를 추가한다.
+ * 
  * @author mj
  *
  */
@@ -20,22 +20,25 @@ public class CorsInterceptor implements HandlerInterceptor
 {
     private static final Logger logger = LoggerFactory.getLogger(CorsInterceptor.class);
     
-    private static final String  ORIGIN                           = "Origin";
     private static final String  ACCESS_CONTROL_ALLOW_ORIGIN      = "Access-Control-Allow-Origin";
     private static final String  ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
+    private static final String  REQUEST_HEADER_ORIGIN            = "Origin";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
     {
         logger.debug("preHandle() start");
         
-        String origin = request.getHeader(ORIGIN);
-        
+        String origin = request.getHeader(REQUEST_HEADER_ORIGIN);
         logger.debug("Origin Header: {}", origin);
-        
+
+        // CORS 가능하도록 응답 헤더 추가
         if (StringUtils.hasLength(origin))
         {
-            response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+            // 요청한 도메인에 대해 CORS 를 허용한다. 제한이 필요하다면 필요한 값으로 설정한다.
+            response.setHeader(ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+            
+            // credentials 허용
             response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
         }
         
@@ -46,13 +49,13 @@ public class CorsInterceptor implements HandlerInterceptor
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
     {
-
+        // do nothing
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception
     {
-
+        // do nothing
     }
 
 }
